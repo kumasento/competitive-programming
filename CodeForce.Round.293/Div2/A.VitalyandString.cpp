@@ -8,19 +8,12 @@ using namespace std;
 int main()
 {
     string s, t; cin>>s>>t;
-
-    bool ok = false;
-    for (int i = 0; i < s.length(); i++)
-        if (s[i] < t[i])
-        {
-            if (s[i] < t[i]-1)
-                s[i] = t[i] - 1, ok = true;
-            else
-                for (int t = i+1; t < s.length() && !ok; t++)
-                    if (s[t] < 'z')
-                        s[t] ++, ok = true;
-        }
-    if (ok)
+    for (int i = s.length()-1; i >= 0; i--)
+    {
+        if (s[i] == 'z') s[i] = 'a';
+        else { s[i] ++; break; }
+    }
+    if (s < t)
         cout << s << endl;
     else
         cout << "No such string" << endl;
