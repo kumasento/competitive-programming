@@ -5,62 +5,44 @@ using namespace std;
 
 using Matrix = vector<vector<int>>;
 
-struct Trans {
-  int x, y, s;
-  Trans(int x, int y, int s) : x(x), y(y), s(s) {}
-};
-
+/**
+ * The key idea behind this solution is not to directly compare an original
+ * matrix and its transposed string - we try to find the invariant that
+ * doesn't change during transposing.
+ *
+ * And the invariant is the anti-diagonal.
+ */
 class Solution {
  public:
-  bool CanBeTransposed(Matrix &A, Matrix &B) { return BFS(A, B, 0, 0, 0); }
+  bool CanBeTransposed(Matrix &A, Matrix &B) {
+    int N = A.size(), M = A[0].size();
 
-  bool BFS(Matrix &A, Matrix &B, int x, int y, int s) {
-    // x, y, k defines the previous transpose
-    int n = A.size(), m = A[0].size();
+    // build the diagonals
+    vector<vector<int>> AD(N + M), BD(N + M);
 
-    if (IsIdentical(A, B)) return true;
-
-    for (int k = 2; k <= min(n, m); k++) {
-      for (int i = 0; i + k <= n; i++) {
-        for (int j = 0; j + k <= m; j++) {
-          if (i == x && j == y && k == s) continue;
-
-          Transpose(A, i, j, k);
-          if (IsIdentical(A, B)) return true;
-          Transpose(A, i, j, k);
-        }
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j < M; j++) {
+        cin >> A[i][j];
+        AD[i + j].push_back(A[i][j]);
       }
     }
 
-    for (int k = 2; k <= min(n, m); k++) {
-      for (int i = 0; i + k <= n; i++) {
-        for (int j = 0; j + k <= m; j++) {
-          if (i == x && j == y && k == s) continue;
-
-          Transpose(A, i, j, k);
-          if (BFS(A, B, i, j, k)) return true;
-          Transpose(A, i, j, k);
-        }
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j < M; j++) {
+        cin >> B[i][j];
+        BD[i + j].push_back(B[i][j]);
       }
     }
 
-    return false;
-  }
+    for (int i = 0; i < N + M; i++) {
+      std::sort(AD[i].begin(), AD[i].end());
+      std::sort(BD[i].begin(), BD[i].end());
 
-  void Transpose(Matrix &A, int x, int y, int k) {
-    for (int i = 0; i < k; i++) {
-      for (int j = 0; j < k; j++) {
-        if (i < j) std::swap(A[x + i][y + j], A[x + j][y + i]);
+      for (int j = 0; j < AD[i].size(); j++) {
+        if (AD[i][j] != BD[i][j]) return false;
       }
     }
-  }
 
-  bool IsIdentical(Matrix &A, Matrix &B) {
-    for (int i = 0; i < A.size(); i++) {
-      for (int j = 0; j < A[0].size(); j++) {
-        if (A[i][j] != B[i][j]) return false;
-      }
-    }
     return true;
   }
 };
@@ -71,13 +53,8 @@ int main(int argc, char *argv[]) {
 
   Matrix A(n, vector<int>(m, 0)), B(n, vector<int>(m, 0));
 
-  for (int i = 0; i < n; i++)
-    for (int j = 0; j < m; j++) cin >> A[i][j];
-  for (int i = 0; i < n; i++)
-    for (int j = 0; j < m; j++) cin >> B[i][j];
-
   Solution sol;
-  cout << (sol.CanBeTransposed(A, B) ? "YES" : "NO") << endl;
+  std::cout << (sol.CanBeTransposed(A, B) ? "YES" : "NO") << std::endl;
 
   return 0;
 }
