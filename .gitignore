@@ -30,3 +30,5 @@
 *.in
 *.dat
 *.out
+
+.vscode/
