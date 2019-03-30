@@ -31,4 +31,4 @@
 *.dat
 *.out
 
-.vscode/
+.vscode/*
