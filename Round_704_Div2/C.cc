@@ -18,58 +18,53 @@ int main(int argc, char *argv[]) {
   int n, m;
   char s[MAXL], t[MAXL];
 
-  vector<vector<int>> pos(26);
-  vector<int> ptr(26, 0);
-  vector<int> freq(26, 0);
-
   cin >> n >> m >> s >> t;
 
-  vector<vector<int>> post(n + 1, vector<int>(26, 0));
+  // DP based solution.
+  // Given that left[i] is the minimum possible p for p_i, right[i] is the
+  // maximum possible p for p_i. left[i] and right[i] can be calculated in a
+  // DP/greedy algorithm.
 
-  // Iterate the string s to build up the char to positions map.
-  // Example:
-  // a: [0, 1]
-  // b: [2, 3]
-  // for aabb
+  // Suppose we are looking at s = "abbbab" and t = "aba"
 
-  for (int i = 0; i < n; i++) pos[s[i] - 'a'].push_back(i);
-  for (int i = n - 1; i >= 0; i--) post[i][s[i] - 'a']++;
-  for (int i = 0; i < m; i++) freq[t[i] - 'a']++;
+  // To find right[i] -
+  //
+  //   a b b b a b | right
+  // a T F F       | 0
+  // b       T     | 3
+  // a         T F | 4
 
-  int ans = INT_MIN, last = -1;
-  for (int i = 0; i < m - 1; i++) {
-    // Find positions for t[i] and s[i+1].
+  // To find left[i] -
+  //
+  //   a b b b a b | left
+  // a T           | 0
+  // b   T         | 1
+  // a     F F T   | 4
 
-    freq[t[i] - 'a']--;
-    int L = pos[t[i] - 'a'][ptr[t[i] - 'a']];
-    int j = pos[t[i + 1] - 'a'].size() - freq[t[i + 1] - 'a'];
-    // cout << j << endl;
-    while (j >= ptr[t[i + 1] - 'a']) {
-      bool isOk = true;
-      for (int c = 0; c < 26; c++) {
-        if (c != t[i + 1] - 'a' &&
-            freq[c] > post[pos[t[i + 1] - 'a'][j] + 1][c]) {
-          // cout << ((char)c + 'a') << " " << j << " " << freq[c] << " "
-          //      << post[pos[t[i + 1] - 'a'][j] + 1][c] << endl;
-          isOk = false;
-          break;
-        }
-      }
+  int left[MAXL], right[MAXL];
 
-      if (isOk) break;
-      j--;
-    }
-    // cout << t[i + 1] << " " << j << endl;
-    int R = pos[t[i + 1] - 'a'][j];
-
-    ans = max(R - L, ans);
-
-    // Move forward the pointer.
-    while (ptr[t[i + 1] - 'a'] < pos[t[i + 1] - 'a'].size() &&
-           pos[t[i + 1] - 'a'][ptr[t[i + 1] - 'a']] <= L)
-      ptr[t[i + 1] - 'a']++;
+  // Initialize right.
+  int p, q;  // p for s, q for t.
+  p = n - 1;
+  for (q = m - 1; q >= 0; q--) {
+    while (s[p] != t[q]) p--;
+    // s[p] == t[q];
+    right[q] = p;
+    p--;
   }
 
+  // Initialize left.
+  p = 0;
+  for (q = 0; q < m; q++) {
+    while (s[p] != t[q]) p++;
+    left[q] = p;
+    p++;
+  }
+
+  int ans = INT_MIN;
+  for (int i = 0; i < m - 1; i++) {
+    ans = max(right[i + 1] - left[i], ans);
+  }
   cout << ans << endl;
 
   return 0;
