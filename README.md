@@ -1,1 +1,1 @@
-# CodeForces.Collection
+# Random competitive programming stuffs
