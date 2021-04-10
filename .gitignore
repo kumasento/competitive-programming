@@ -31,4 +31,6 @@
 *.dat
 *.out
 
+a.out
+
 .vscode/*
