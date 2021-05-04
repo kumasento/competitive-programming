@@ -1,55 +1,49 @@
+// From the editorial
 #include <bits/stdc++.h>
 
 #define LL long long
 
 using namespace std;
 
-int min5(int a, int b, int c, int d,int e) {
-  return min(min(a, b), min(c, min(d, e)));
-}
-
-int max3(int a, int b, int c) {
-  return max(a, max(b, c));
-}
+// Problems of the form of “maximum value of minimum value” can sometimes be
+// solved easily by boiling it down to a yes-no problem of “can the answer be
+// more than x?” and do binary search for the answer.
 
 int main() {
-  int N; cin >> N;
+  int N;
+  cin >> N;
 
-  vector<int> A(N), B(N), C(N), D(N), E(N);
-  for (int i = 0; i < N; i ++)
-    cin >> A[i] >> B[i] >> C[i] >> D[i] >> E[i];
-  
+  vector A(N, array<int, 5>{});
+  for (auto &a : A) for (auto &i : a) cin >> i;  
 
-  array<int, 5> best;
-  best[0] = max_element(A.begin(), A.end()) - A.begin();
-  best[1] = max_element(B.begin(), B.end()) - B.begin();
-  best[2] = max_element(C.begin(), C.end()) - C.begin();
-  best[3] = max_element(D.begin(), D.end()) - D.begin();
-  best[4] = max_element(E.begin(), E.end()) - E.begin();
+  // binary search the answer.
+  int lo = 0, hi = 1000000001;
 
-  int ans =0;
-  for (int i = 0; i < N; i ++)
-    for (int j = 0; j < N; j ++) {
-      if (i == j)
-        continue;
-
-      array<int, 5> power{
-        max(A[i], A[j]),
-        max(B[i], B[j]),
-        max(C[i], C[j]),
-        max(D[i], D[j]),
-        max(E[i], E[j])
-      };
-      for (int k = 0; k < best.size(); k ++) {
-        power[0] = max(A[best[k]], power[0]);
-        power[1] = max(B[best[k]], power[1]);
-        power[2] = max(C[best[k]], power[2]);
-        power[3] = max(D[best[k]], power[3]);
-        power[4] = max(E[best[k]], power[4]);
+  auto check = [&](int x) -> bool {
+    set<int> s;
+    for (auto &a : A) {
+      int bit = 0;
+      // check if there is any value >= x
+      for (int &i : a) {
+        bit <<= 1;
+        bit |= i >= x;
       }
-      int strength = *min_element(power.begin(), power.end());
-      ans = max(ans, strength);
+      s.insert(bit);
     }
 
-  cout << ans << endl;
+    // s only has space of O(32)
+
+    for (int x : s) for (int y : s) for (int z : s) {
+      // b11111
+      if ((x | y | z) == 31) return 1;
+    }
+
+    return 0;
+  };
+
+  while (abs(lo - hi) > 1) {
+    int mid = (lo + hi) / 2;
+    (check(mid) ? lo : hi) = mid;
+  }
+  cout << lo << endl;
 }
