@@ -11,20 +11,21 @@ int main() {
     for (int j = 0; j < m; j ++)
       cin >> cells[i][j];
 
+  map<pair<int, int>, LL> cmap1, cmap2;
   vector vis(n, vector<bool>(m, false));
 
-  queue<tuple<int, int, LL>> q;
-  q.push({0, 0, 0});
+  queue<tuple<int, int, LL>> q1, q2;
+  q1.push({0, 0, 0});
   vis[0][0] = true;
+  if (cells[0][0] > 0)
+    cmap1[{0, 0}] = 0;
 
   int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-  map<pair<int, int>, LL> cmap1, cmap2;
-
   LL bst = LONG_LONG_MAX;
 
-  while (!q.empty()) {
-    int i, j; LL c; tie(i, j, c) = q.front(); q.pop();
+  while (!q1.empty()) {
+    int i, j; LL c; tie(i, j, c) = q1.front(); q1.pop();
 
     if (i == n - 1 && j == m - 1) {
       bst = min(bst, c);
@@ -38,20 +39,23 @@ int main() {
       if (vis[x][y] || cells[x][y] == -1)
         continue;
       vis[x][y] = true;
-      q.push({x, y, c + w});
+      q1.push({x, y, c + w});
 
       if (cells[x][y] != 0) 
         cmap1[{x, y}] = c + w;
     }
   }
 
-  q.push({n - 1, m - 1, 0});
+  if (cells[n-1][m-1] > 0)
+    cmap2[{n-1, m-1}] = 0;
+  q2.push({n - 1, m - 1, 0});
   for (int i = 0; i < n; i ++)
-  for (int j = 0; j < m; j ++)
-    vis[i][j] = false;
+    for (int j = 0; j < m; j ++)
+      vis[i][j] = false;
+  vis[n - 1][m - 1] = true;
   
-  while (!q.empty()) {
-    int i, j; LL c; tie(i, j, c) = q.front(); q.pop();
+  while (!q2.empty()) {
+    int i, j; LL c; tie(i, j, c) = q2.front(); q2.pop();
 
     for (auto d : dirs) {
       int x, y; x = d[0] + i, y = d[1] + j;
@@ -60,7 +64,7 @@ int main() {
       if (vis[x][y] || cells[x][y] == -1)
         continue;
       vis[x][y] = true;
-      q.push({x, y, c + w});
+      q2.push({x, y, c + w});
 
       if (cells[x][y] != 0) 
         cmap2[{x, y}] = c + w;
