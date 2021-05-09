@@ -4,23 +4,7 @@ using namespace std;
 
 class MarriageAndCirclingChallenge {
 
-  public:
-
-  void dfs(int i, vector<bool> &vis, vector<vector<int>> &adj, LL &cnt, int depth = 0) {
-    vis[i] = true;
-
-    if (depth == 3) {
-      for (int to : adj[i]) 
-        if (vis[to])
-          cnt ++;
-    } else {
-      for (int to : adj[i]) 
-        if (!vis[to])
-          dfs(to, vis, adj, cnt, depth + 1);
-    }
-
-    vis[i] = false;
-  }
+public:
 
   long long solve(int N, int threshold, int state) {
     auto rnd = [&]() {
@@ -28,24 +12,30 @@ class MarriageAndCirclingChallenge {
       return state % 100;
     };
 
-    vector<vector<int>> adj(N);
+    vector<bitset<601>> g(N, bitset<601>(0));
+    vector<bitset<601>> rg(N, bitset<601>(0));
 
     for (int i = 0; i < N; i ++) {
       for (int j = i + 1; j < N; j ++) {
-        if (rnd() < threshold) {
-          adj[i].push_back(j);
+        LL r = rnd();
+        if (r < threshold) {
+          g[i][j] = rg[j][i] = true;
         } else {
-          adj[j].push_back(i);
+          g[j][i] = rg[i][j] = true;
         }
       }
     }
 
-    vector<bool> vis(N, false); 
     LL ans = 0;
-    for (int i = 0; i < N; i ++) 
-      dfs(i, vis, adj, ans);
+    for (int i = 0; i < N; i ++) {
+      for (int j = i + 1; j < N; j ++) {
+        auto u1 = g[i] & rg[j], u2 = rg[i] & g[j];
+        u1 >>= i, u2 >>= i;
+        ans += u1.count() * u2.count();
+      }
+    }
 
-    return ans / 4;
+    return ans;
   }
 
 };
@@ -53,4 +43,6 @@ class MarriageAndCirclingChallenge {
 int main() {
   ios_base::sync_with_stdio(false); cin.tie(NULL);
 
+  MarriageAndCirclingChallenge sol;
+  cout << sol.solve(600, 47, 42) << endl;
 }

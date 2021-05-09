@@ -11,7 +11,12 @@ public:
       int curr = start, charge = 0;
       for (int n = 0; n < N; n ++) {
         int next = (curr + 1) % N;
-        int dis = (relative[next] - relative[curr] + forumLength) % forumLength;
+        int dis;
+        if (N == 1)
+          dis = forumLength;
+        else
+          dis = (relative[next] - relative[curr] + forumLength) % forumLength;
+
         charge += greeting[curr] - dis;
 
         if (charge < 0)
