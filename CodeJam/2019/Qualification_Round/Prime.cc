@@ -1,13 +1,7 @@
 /// Some experiments regarding prime numbers.
-
-#include <algorithm>
-#include <cstdlib>
-#include <iostream>
-#include <set>
-#include <unordered_set>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
+#define LL long long
 
 vector<int> generatePrimesUnder(const int N) {
   vector<bool> sieve(N + 1, true);

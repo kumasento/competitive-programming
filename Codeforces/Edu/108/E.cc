@@ -9,18 +9,18 @@ vector<bool> used;
 vector<int> tin, low;
 int timer;
 
-void dfs(int v, int p = -1) {
-  used[v] = true;
-  tin[v] = low[v] = timer++;
+// void dfs(int v, int p = -1) {
+//   used[v] = true;
+//   tin[v] = low[v] = timer++;
 
-  for (int to : adj[v]) {
-    if (to == p)
-      continue;
+//   for (int to : adj[v]) {
+//     if (to == p)
+//       continue;
 
-    if (used[u]) {
-    }
-  }
-}
+//     if (used[u]) {
+//     }
+//   }
+// }
 
 int main() {
   int n;

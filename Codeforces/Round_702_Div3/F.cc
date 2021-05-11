@@ -1,10 +1,6 @@
-#include <algorithm>
-#include <iostream>
-#include <map>
-#include <unordered_map>
-#include <unordered_set>
-
+#include <bits/stdc++.h>
 using namespace std;
+#define LL long long
 
 #define MAXN 200001
 
