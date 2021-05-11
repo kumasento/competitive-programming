@@ -1,7 +1,6 @@
-#include <iostream>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
+#define LL long long
 
 int dp_lis(vector<int> a) {
   vector<int> d(a.size(), 1);

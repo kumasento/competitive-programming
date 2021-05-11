@@ -1,9 +1,6 @@
-#include <algorithm>
-#include <cmath>
-#include <iostream>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
+#define LL long long
 
 class RangeSumQueryTable {
   vector<vector<int>> st;

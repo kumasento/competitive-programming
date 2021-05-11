@@ -1,11 +1,6 @@
-#include <algorithm>
-#include <iostream>
-#include <iterator>
-#include <queue>
-#include <stack>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
+#define LL long long
 
 class MinimumStack {
   stack<pair<int, int>> st;

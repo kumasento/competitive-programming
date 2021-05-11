@@ -1,9 +1,6 @@
-#include <algorithm>
-#include <iostream>
-#include <iterator>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
+#define LL long long
 
 class DisjointSetUnion {
   vector<int> parent;
