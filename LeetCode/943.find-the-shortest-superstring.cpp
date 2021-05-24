@@ -74,13 +74,6 @@ constexpr LL LL_INF = 10000000000000000LL;
 
 
 
-int main() {
-  ios_base::sync_with_stdio(false); cin.tie(NULL);
-#ifdef LOCAL_DEBUG
-  ifstream in("943.find-the-shortest-superstring.in"); cin.rdbuf(in.rdbuf());
-#endif
-
-}
 
 // @lc code=start
 class Solution {
@@ -109,24 +102,28 @@ public:
 
         vector<vector<int>> overlap(n, vector<int>(n, 0));
         for (int i = 0; i < n; i ++) 
-            for (int j = 0; j < n; j ++) 
+            for (int j = 0; j < n; j ++) {
                 overlap[i][j] = calc(words[i], words[j]);
 
-        vector<vector<int>> dp(1<<n, vector<int>(n));
-        vector<vector<int>> parent(1<<n, vector<int>(n));
+                // cout << "Overlap " << words[i] << " <-> " << words[j] << endl;
+                // cout << overlap[i][j] << endl;
+            }
 
-        for (int mask = 0; mask < (1 << n); ++ mask) {
-            fill(parent[mask].begin(), parent[mask].end(), -1);
+        vector<vector<int>> dp(1<<n, vector<int>(n));
+        vector<vector<int>> pa(1<<n, vector<int>(n, -1));
+
+        for (int mask = 0; mask < (1<<n); ++ mask) {
             for (int bit = 0; bit < n; ++bit) {
                 if ((mask >> bit) & 1) { // if this bit has been set
                     int pmask = mask ^ (1 << bit); // unset the bit
-                    if (pmask == 0) continue; // initial case
+                    if (pmask == 0) continue; // initial case, bit is the only set one
+
                     for (int i = 0; i < n; ++i) {
                         if ((pmask >> i) & 1) {
                             int val = dp[pmask][i] + overlap[i][bit];
                             if (val > dp[mask][bit]) {
                                 dp[mask][bit] = val;
-                                parent[mask][bit] = i;
+                                pa[mask][bit] = i;
                             }
                         }
                     }
@@ -143,13 +140,14 @@ public:
         // find the best ending word.
         int p = 0;
         for (int j = 0; j < n; ++ j)
-            if (dp[(1 << n) - 1][j] > dp[(1 << n) - 1][p])
+            if (dp[(1<<n)-1][j] > dp[(1<<n)-1][p])
                 p = j;
+        // cout << words[p] << endl;
 
         while (p != -1) {
             perm[t ++] = p;
             seen[p] = true;
-            int p2 = parent[mask][p];
+            int p2 = pa[mask][p];
             mask ^= 1 << p;
             p = p2;
         } 
@@ -159,6 +157,7 @@ public:
             if (!seen[i])
                 perm[t ++] = i;
 
+        reverse(perm.begin(), perm.end());
         string ans = words[perm[0]];
         for (int i = 1; i < n; ++ i) {
             int len = overlap[perm[i-1]][perm[i]];
@@ -170,3 +169,12 @@ public:
 };
 // @lc code=end
 
+
+int main() {
+
+    vector<string> words{"catg","ctaagt","gcta","ttca","atgcatc"};
+
+    Solution sol;
+    cout << sol.shortestSuperstring(words) << endl;
+
+}
