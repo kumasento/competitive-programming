@@ -11,6 +11,6 @@ A list of my competitive programming accounts:
 | ------------ | ------------------------------------------------------------------------ |
 | Codeforces   | [kumasento](https://codeforces.com/profile/kumasento)                    |
 | AtCoder      | [kumasento](https://atcoder.jp/users/kumasento)                          |
-| TopCoder     | [kumasento](https://www.topcoder.com/members/kumasento) (not yet ranked) |
+| TopCoder     | [kumasento](https://www.topcoder.com/members/kumasento)                  |
 | LeetCode     | [zehziur](https://leetcode.com/zehziur/)                                 |
 | ProjectEuler | [kumasento](https://projecteuler.net/profile/kumasento.png)              |
