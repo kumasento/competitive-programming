@@ -20,10 +20,12 @@ int score(const Mat &A) {
       if (A[i][j] >= 0)
         tasks[A[i][j]] = j;
 
+#ifdef DEBUG
     cout << "Tasks: ";
-    for (int j = 0; j < N; j ++)
+    for (int j = 0; j < N; j++)
       cout << tasks[j] << " ";
     cout << endl;
+#endif
 
     // simulate each task
     pair<int, int> pos = {0, 0};
@@ -41,6 +43,7 @@ int score(const Mat &A) {
       int time_start = max(time + time_to_start, ride.s);
       int time_finish = time_start + time_to_dest;
 
+#ifdef DEBUG
       cout << "Vehicle " << i << " starts to handle ride " << tasks[j] << " at "
            << time << endl;
       cout << "Ride: (" << ride.a << " " << ride.b << ") -> (" << ride.x << ", "
@@ -49,17 +52,24 @@ int score(const Mat &A) {
       cout << "Time starts: " << time_start << endl;
       cout << "Time to dest: " << time_to_dest << endl;
       cout << "Time finish: " << time_finish << endl;
+#endif
 
       if (time_finish < ride.f) {
         tot += dist;
+#ifdef DEBUG
         cout << "Finished on time: " << tot << endl;
+#endif
       }
       if (time_start == ride.s) {
         tot += B;
+#ifdef DEBUG
         cout << "Started on time: " << tot << endl;
+#endif
       }
 
+#ifdef DEBUG
       cout << "New score! " << tot << endl;
+#endif
 
       // Arrived
       pos = {ride.x, ride.y};
@@ -85,9 +95,12 @@ int main(int argc, char *argv[]) {
   // order.
   Mat A(F, vector<int>(N, -1));
 
-  A[0][0] = 0;
-  A[1][2] = 0;
-  A[1][1] = 1;
+  // Round robin
+  int k = 0; vector<int> cnts(F, 0);
+  for (int i = 0; i < N; i ++) {
+    A[k][i] = cnts[k] ++;
+    k = (k + 1) % F;
+  }
 
   cout << score(A) << endl;
 
