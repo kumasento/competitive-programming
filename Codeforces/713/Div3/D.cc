@@ -1,6 +1,6 @@
 /**
  * Author: kumasento
- * Date:   2021-06-06T15:28:03
+ * Date:   2021-06-08T20:53:45
  */
 
 #include <bits/stdc++.h>
@@ -39,28 +39,44 @@ template <typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cer
 
 /// --------------------- Solution:
 
+void print(vector<LL> &b, int i, int j) {
+  for (int k = 0; k < (int) b.size(); k ++)
+    if (k != i && k != j)
+      cout << b[k] << ' ';
+  cout << '\n';
+}
+
 int main() {
   ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
   #ifdef LOCAL_DEBUG
-  ifstream in("A.in"); if (in) cin.rdbuf(in.rdbuf());
+  ifstream in("D.in"); if (in) cin.rdbuf(in.rdbuf());
   #endif
 
   int t; cin >> t;
-
   while (t --) {
-    int n; cin >> n;
-    vector<int> a(n); for (int &i : a) cin >> i;
+    int n; cin >> n; vector<LL> b(n + 2); for (auto &i : b) cin >> i;
 
-    if (any_of(a.begin(), a.end(), [](int i) { return i < 0; }))
-      cout << "NO\n";
-    else {
-      cout << "YES\n";
-      cout << 101 << '\n';
-      for (int i = 0; i <= 100; i ++) cout << i << ' ';
-      cout << '\n';
+    LL sum = accumulate(b.begin(), b.end(), 0LL);
+    unordered_map<LL, int> cnts; for (LL i : b) ++cnts[i];
+
+    bool ok = false;
+    for (int i = 0; i < n + 2; i ++) {
+      // if b[i] is the sum, then b[i] = sum - b[i] - b[j]
+      // b[j] = sum - 2 b[i]
+      LL bj = sum - 2 * b[i];
+      if ((bj == b[i] && cnts[bj] >= 2) ||
+          (bj != b[i] && cnts[bj] >= 1)) {
+        -- cnts[bj], -- cnts[b[i]];
+        for (auto [v, c] : cnts) for (int k = 0; k < c; k ++) cout << v << ' '; cout << '\n';
+
+        ok = true;
+        break;
+      }
     }
 
+    if (!ok) cout << -1 << '\n';
   }
+
 
 
 }

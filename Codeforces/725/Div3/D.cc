@@ -1,7 +1,9 @@
 /**
  * Author: kumasento
- * Date:   2021-06-06T15:28:03
+ * Date:   2021-06-10T20:55:15
  */
+
+// NOTE: this TLE
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -39,28 +41,52 @@ template <typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cer
 
 /// --------------------- Solution:
 
+vector<int> primes;
+
+int calc(int n) {
+	int cnt = 0;
+	for (int p : primes) {
+		if ((LL) p * p > n)
+			break;
+		while (n % p == 0) { cnt ++; n /= p; }
+	}
+	if (n > 1) cnt ++;
+	return cnt;
+}
+
 int main() {
-  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-  #ifdef LOCAL_DEBUG
-  ifstream in("A.in"); if (in) cin.rdbuf(in.rdbuf());
-  #endif
+	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+	#ifdef LOCAL_DEBUG
+	ifstream in("D.in"); if (in) cin.rdbuf(in.rdbuf());
+	#endif
 
-  int t; cin >> t;
+	int t; cin >> t;
 
-  while (t --) {
-    int n; cin >> n;
-    vector<int> a(n); for (int &i : a) cin >> i;
+	constexpr int N = 1e6;
+	vector<bool> is_prime(N + 1, true);
+	for (int i = 2; i <= N; i ++)
+		if (is_prime[i]) {
+			primes.push_back(i);
+			for (int j = i; j <= N; j += i)
+				is_prime[j] = true;
+		}
 
-    if (any_of(a.begin(), a.end(), [](int i) { return i < 0; }))
-      cout << "NO\n";
-    else {
-      cout << "YES\n";
-      cout << 101 << '\n';
-      for (int i = 0; i <= 100; i ++) cout << i << ' ';
-      cout << '\n';
-    }
+	while (t --) {
+		int a, b, k; cin >> a >> b >> k;
 
-  }
+		if (a > b) swap(a, b);
+		// if k = 1, a or b should be divisible by the other, and a != b
+		// if k = 2, just divide a by a, b by b.
+		if (k == 1) {
+			if (b % a == 0 && b != a) cout << "YES\n";
+			else cout << "NO\n";
+		} else {
+			int d1 = calc(a), d2 = calc(b);
+			if (d1 + d2 >= k) cout << "YES\n";
+			else cout << "NO\n";
+		}
+	}
+
 
 
 }

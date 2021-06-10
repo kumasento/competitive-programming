@@ -1,6 +1,6 @@
 /**
  * Author: kumasento
- * Date:   2021-06-06T15:28:03
+ * Date:   2021-06-09T21:18:34
  */
 
 #include <bits/stdc++.h>
@@ -42,25 +42,35 @@ template <typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cer
 int main() {
   ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
   #ifdef LOCAL_DEBUG
-  ifstream in("A.in"); if (in) cin.rdbuf(in.rdbuf());
+  ifstream in("B.in"); if (in) cin.rdbuf(in.rdbuf());
   #endif
 
   int t; cin >> t;
-
   while (t --) {
-    int n; cin >> n;
-    vector<int> a(n); for (int &i : a) cin >> i;
+    int n; cin >> n; string s; cin >> s;
 
-    if (any_of(a.begin(), a.end(), [](int i) { return i < 0; }))
-      cout << "NO\n";
-    else {
-      cout << "YES\n";
-      cout << 101 << '\n';
-      for (int i = 0; i <= 100; i ++) cout << i << ' ';
-      cout << '\n';
-    }
+    // #T = 2 * #M
+    // from left should be fine. T +1, M -2. Maybe not.
+    // Every M you see, there should be a T before, and a T after.
 
+    auto check = [&]() {
+      int T = 0, M = 0;
+      for (char c : s) {
+        if (c == 'T') T ++;
+        else {
+          if (T == 0) return false;
+          ++ M, -- T;
+        }
+      }
+      return T == M;
+    };
+
+    bool ok = check();
+    reverse(s.begin(), s.end());
+    ok = ok & check();
+
+    if (!ok)  cout << "NO\n";
+    else cout << "YES\n";
   }
-
 
 }

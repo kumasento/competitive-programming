@@ -1,6 +1,6 @@
 /**
  * Author: kumasento
- * Date:   2021-06-06T15:28:03
+ * Date:   2021-06-10T20:44:48
  */
 
 #include <bits/stdc++.h>
@@ -40,27 +40,24 @@ template <typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cer
 /// --------------------- Solution:
 
 int main() {
-  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-  #ifdef LOCAL_DEBUG
-  ifstream in("A.in"); if (in) cin.rdbuf(in.rdbuf());
-  #endif
+	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+	#ifdef LOCAL_DEBUG
+	ifstream in("B.in"); if (in) cin.rdbuf(in.rdbuf());
+	#endif
 
-  int t; cin >> t;
+	int t; cin >> t;
+	while (t --) {
+		int n; cin >> n; vector<int> a(n); for (auto &i : a) cin >> i;
 
-  while (t --) {
-    int n; cin >> n;
-    vector<int> a(n); for (int &i : a) cin >> i;
+		int sum = accumulate(a.begin(), a.end(), 0);
+		if (sum % n != 0) {
+			cout << -1 << '\n';
+		} else {
+			int k = count_if(a.begin(), a.end(), [&](const int &i) { return i > (sum / n); });
+			cout << k << '\n';
+		}
+	}
 
-    if (any_of(a.begin(), a.end(), [](int i) { return i < 0; }))
-      cout << "NO\n";
-    else {
-      cout << "YES\n";
-      cout << 101 << '\n';
-      for (int i = 0; i <= 100; i ++) cout << i << ' ';
-      cout << '\n';
-    }
-
-  }
 
 
 }

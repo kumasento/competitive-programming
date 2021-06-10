@@ -1,6 +1,6 @@
 /**
  * Author: kumasento
- * Date:   2021-06-06T15:28:03
+ * Date:   2021-06-07T11:04:16
  */
 
 #include <bits/stdc++.h>
@@ -49,18 +49,19 @@ int main() {
 
   while (t --) {
     int n; cin >> n;
-    vector<int> a(n); for (int &i : a) cin >> i;
-
-    if (any_of(a.begin(), a.end(), [](int i) { return i < 0; }))
-      cout << "NO\n";
-    else {
-      cout << "YES\n";
-      cout << 101 << '\n';
-      for (int i = 0; i <= 100; i ++) cout << i << ' ';
-      cout << '\n';
+    vector<int> a, b;
+    for (int i = 0; i < n; i ++) {
+      int x; cin >> x;
+      if (x & 1) a.push_back(x);
+      else b.push_back(x);
     }
 
+    // the sum of each pair is a even number. odd + odd, even + even.
+    for (int i : a) cout << i << ' ';
+    for (int i : b) cout << i << ' ';
+    cout << '\n';
   }
+
 
 
 }

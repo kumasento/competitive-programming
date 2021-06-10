@@ -1,6 +1,6 @@
 /**
  * Author: kumasento
- * Date:   2021-06-06T15:28:03
+ * Date:   2021-06-10T20:39:14
  */
 
 #include <bits/stdc++.h>
@@ -45,21 +45,17 @@ int main() {
   ifstream in("A.in"); if (in) cin.rdbuf(in.rdbuf());
   #endif
 
+
   int t; cin >> t;
-
   while (t --) {
-    int n; cin >> n;
-    vector<int> a(n); for (int &i : a) cin >> i;
+    int n; cin >> n; vector<int> a(n); for (auto &i : a) cin >> i;
 
-    if (any_of(a.begin(), a.end(), [](int i) { return i < 0; }))
-      cout << "NO\n";
-    else {
-      cout << "YES\n";
-      cout << 101 << '\n';
-      for (int i = 0; i <= 100; i ++) cout << i << ' ';
-      cout << '\n';
-    }
+    int i = min_element(a.begin(), a.end()) - a.begin();
+    int j = max_element(a.begin(), a.end()) - a.begin();
+    if (i > j) swap(i, j);
 
+    int d1 = i + 1, d2 = n - j, d3 = j - i;
+    cout << min(min(d1 + d2, d1 + d3), d2 + d3) << '\n';
   }
 
 
